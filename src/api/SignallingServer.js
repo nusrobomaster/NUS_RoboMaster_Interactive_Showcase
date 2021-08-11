@@ -20,7 +20,12 @@ class SignallingServer {
 
 
     initialize(IP, port) {
+        console.log("initializing");
         this.serverConnection = new WebSocket(`ws://${IP}:${port}`);
+        this.serverConnection.onerror = setInterval(function() {
+            new WebSocket(`ws://${IP}:${port}`);
+            console.log("re-attempting connection")},
+            5000);
 
         this.serverConnection.onmessage = (receivedMessage) => {
             console.log("Got message from server: ", receivedMessage);
